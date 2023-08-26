@@ -7,20 +7,19 @@ const options = [
   'Porto Alegre, RS - Brasil',
   'Porto Seguro, BA - Brasil',
   'Porto - Portugal',
-  'Lagarto, SE - Brasil',
-  'São Paulo, SP - Brasil',
-  'Rio de Janeiro, RJ - Brasil',
-  'Nova York, NY - Estados Unidos',
   'Londres, Inglaterra - Reino Unido',
   'Tóquio, Japão',
   'Paris, França',
+  'Sydney, Austrália',
+  'Toronto, Canadá',
+  'Cidade do México, México',
 ]
 
 export default function Input() {
   const [value, setValue] = useState<string | null>('')
   const [inputValue, setInputValue] = useState('')
 
-  const [isLoading, setIsloading] = useState(true)
+  const [isLoading, setIsloading] = useState(false)
 
   const { getInputProps, getListboxProps, getOptionProps, groupedOptions } =
     useAutocomplete({
@@ -35,7 +34,7 @@ export default function Input() {
   const inputProps = isLoading ? { disabled: true } : getInputProps()
 
   return (
-    <div className="flex w-[452px] flex-col gap-2">
+    <div className="relative flex h-12 w-full max-w-[452px] flex-col">
       <div className="group relative flex h-max w-full ">
         <input
           placeholder="Buscar local"
@@ -49,7 +48,7 @@ export default function Input() {
       </div>
       {groupedOptions.length > 0 && (
         <ul
-          className="flex w-full flex-col gap-[1px] overflow-hidden rounded-lg"
+          className="absolute top-16 flex w-full flex-col gap-[1px] overflow-hidden rounded-lg"
           {...getListboxProps()}
         >
           {(groupedOptions as string[]).map((option, index) => (

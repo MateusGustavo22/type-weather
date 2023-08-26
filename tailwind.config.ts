@@ -8,6 +8,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      screens: {
+        mobile: { max: '414px' },
+      },
       colors: {
         blue_light: '#8FB2F5',
         base: {
@@ -19,12 +22,12 @@ const config: Config = {
           'gray-400': '#7F7F98',
           'gray-300': '#ABABC4',
           'gray-200': '#BFBFD4',
-          'gray-100': '#FAFAFA'
-        }
+          'gray-100': '#FAFAFA',
+        },
       },
       fontFamily: {
         nunito: 'var(--font-nunito)',
-      }
+      },
     },
   },
   plugins: [],
