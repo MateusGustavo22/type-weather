@@ -8,37 +8,40 @@ const options = [
   'Porto Seguro, BA - Brasil',
   'Porto - Portugal',
   'Lagarto, SE - Brasil',
+  'São Paulo, SP - Brasil',
+  'Rio de Janeiro, RJ - Brasil',
+  'Nova York, NY - Estados Unidos',
+  'Londres, Inglaterra - Reino Unido',
+  'Tóquio, Japão',
+  'Paris, França',
 ]
 
 export default function Input() {
   const [value, setValue] = useState<string | null>('')
   const [inputValue, setInputValue] = useState('')
 
-  const [isLoading, setIsloading] = useState(false)
+  const [isLoading, setIsloading] = useState(true)
 
-  const {
-    getRootProps,
-    getInputProps,
-    getListboxProps,
-    getOptionProps,
-    groupedOptions,
-    focused,
-  } = useAutocomplete({
-    id: 'use-autocomplete-demo',
-    options: options,
-    value,
-    onChange: (event, newValue) => setValue(newValue),
-    inputValue,
-    onInputChange: (event, newInputValue) => setInputValue(newInputValue),
-  })
+  const { getInputProps, getListboxProps, getOptionProps, groupedOptions } =
+    useAutocomplete({
+      id: 'use-autocomplete-demo',
+      options: options,
+      value,
+      inputValue,
+      onChange: (event, newValue) => setValue(newValue),
+      onInputChange: (event, newInputValue) => setInputValue(newInputValue),
+    })
+
+  const inputProps = isLoading ? { disabled: true } : getInputProps()
 
   return (
-    <div className="flex w-[452px] flex-col gap-1">
-      <div className="group relative flex h-max w-full " {...getRootProps()}>
+    <div className="flex w-[452px] flex-col gap-2">
+      <div className="group relative flex h-max w-full ">
         <input
           placeholder="Buscar local"
-          className="flex h-[56px] w-full rounded-lg border border-transparent bg-base-gray-600 pl-5 pr-5 text-base text-white placeholder-base-gray-400 outline-none hover:border-violet-900 focus:border-violet-500"
-          {...getInputProps()}
+          data-loading={isLoading}
+          {...inputProps}
+          className="flex h-[56px] w-full rounded-lg border-2 border-transparent bg-base-gray-600 pl-5 pr-5 font-nunito text-base text-white placeholder-base-gray-400 outline-none hover:border-violet-900 focus:border-violet-500 data-[loading=true]:bg-base-gray-800 data-[loading=true]:text-base-gray-200 data-[loading=true]:hover:border-transparent"
         />
         <div className="absolute right-5 top-[22%]">
           {isLoading ? <Espinner /> : null}
@@ -49,9 +52,9 @@ export default function Input() {
           className="flex w-full flex-col gap-[1px] overflow-hidden rounded-lg"
           {...getListboxProps()}
         >
-          {options.map((option, index) => (
+          {(groupedOptions as string[]).map((option, index) => (
             <li
-              className="w-ful flex h-[54px] cursor-pointer items-center bg-base-gray-500 pl-5 pr-5 text-white hover:bg-[#36364a]"
+              className="w-ful flex h-[54px] cursor-pointer items-center bg-base-gray-500 pl-5 pr-5 font-nunito text-white hover:bg-[#36364a]"
               key={option}
               {...getOptionProps({ option, index })}
             >
