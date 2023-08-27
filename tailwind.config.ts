@@ -10,6 +10,7 @@ const config: Config = {
     extend: {
       screens: {
         mobile: { max: '414px' },
+        mobile2: { max: '532px' },
       },
       colors: {
         blue_light: '#8FB2F5',

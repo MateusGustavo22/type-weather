@@ -34,7 +34,7 @@ export default function Input() {
   const inputProps = isLoading ? { disabled: true } : getInputProps()
 
   return (
-    <div className="relative flex h-12 w-full max-w-[452px] flex-col">
+    <div className="relative flex h-12 w-full max-w-[600px] flex-col">
       <div className="group relative flex h-max w-full ">
         <input
           placeholder="Buscar local"
@@ -48,7 +48,7 @@ export default function Input() {
       </div>
       {groupedOptions.length > 0 && (
         <ul
-          className="absolute top-16 flex w-full flex-col gap-[1px] overflow-hidden rounded-lg"
+          className="absolute top-16 z-50 flex w-full flex-col gap-[1px] overflow-hidden rounded-lg"
           {...getListboxProps()}
         >
           {(groupedOptions as string[]).map((option, index) => (

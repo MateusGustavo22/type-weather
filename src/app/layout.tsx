@@ -20,16 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${nunito.variable}`}>
-        <div
-          style={{
-            backgroundImage: 'url(/images/backgrounds/background.png)',
-          }}
-          className="fixed flex h-full min-h-screen w-full justify-center overflow-auto bg-cover bg-center bg-no-repeat p-4"
-        >
-          {children}
-        </div>
-      </body>
+      <body className={`${nunito.variable} bg-base-gray-900`}>{children}</body>
     </html>
   )
 }
