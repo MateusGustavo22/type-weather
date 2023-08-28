@@ -7,8 +7,8 @@ import sun from 'public/icons/phosphor/sun.svg'
 
 export default function DetailsToday() {
   return (
-    <div className="flex w-full max-w-[630px] flex-col gap-5 rounded-xl bg-base-gray-800 p-6 mobile:p-4">
-      <span className="font-nunito text-base text-base-gray-400">
+    <div className="flex w-full max-w-[630px] flex-col gap-5 rounded-xl bg-base-gray-800 p-6 pb-2 mobile:p-4">
+      <span className="tablet2:hidden font-nunito text-base text-base-gray-400">
         Detalhes do clima hoje
       </span>
       <div className="w-full">
