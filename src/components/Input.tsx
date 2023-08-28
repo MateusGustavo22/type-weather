@@ -16,7 +16,7 @@ const options = [
 ]
 
 export default function Input() {
-  const [value, setValue] = useState<string | null>('')
+  const [value, setValue] = useState<string | null>(options[0] || null)
   const [inputValue, setInputValue] = useState('')
 
   const [isLoading, setIsloading] = useState(false)
@@ -29,6 +29,8 @@ export default function Input() {
       inputValue,
       onChange: (event, newValue) => setValue(newValue),
       onInputChange: (event, newInputValue) => setInputValue(newInputValue),
+      isOptionEqualToValue: (option, value) =>
+        option === value || option === '',
     })
 
   const inputProps = isLoading ? { disabled: true } : getInputProps()
@@ -48,7 +50,7 @@ export default function Input() {
       </div>
       {groupedOptions.length > 0 && (
         <ul
-          className="absolute top-16 z-50 flex w-full flex-col gap-[1px] overflow-hidden rounded-lg"
+          className="absolute top-16 z-50 flex w-full flex-col gap-[1px] overflow-hidden rounded-lg bg-base-gray-800"
           {...getListboxProps()}
         >
           {(groupedOptions as string[]).map((option, index) => (
