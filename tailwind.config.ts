@@ -9,8 +9,12 @@ const config: Config = {
   theme: {
     extend: {
       screens: {
-        mobile: { max: '414px' },
+        mobile1: { max: '414px' },
         mobile2: { max: '532px' },
+        tablet1: { max: '670px' },
+        tablet2: { max: '1200px' },
+        desktop1: { max: '1366px' },
+        desktop2: { max: '1314px' },
       },
       colors: {
         blue_light: '#8FB2F5',

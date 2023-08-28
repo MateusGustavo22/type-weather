@@ -7,12 +7,12 @@ import sun from 'public/icons/phosphor/sun.svg'
 
 export default function DetailsToday() {
   return (
-    <div className="flex w-full max-w-[630px] flex-col gap-5 rounded-xl bg-base-gray-800 p-6 pb-2 mobile:p-4">
-      <span className="tablet2:hidden font-nunito text-base text-base-gray-400">
+    <div className="mobile1:p-4 flex w-full max-w-[630px] flex-col gap-5 rounded-xl bg-base-gray-800 p-6 pb-2">
+      <span className="font-nunito text-base text-base-gray-400 tablet2:hidden">
         Detalhes do clima hoje
       </span>
       <div className="w-full">
-        <div className="flex h-[64px] w-full items-center justify-between border-b border-b-base-gray-600 mobile:h-[56px]">
+        <div className="mobile1:h-[56px] flex h-[64px] w-full items-center justify-between border-b border-b-base-gray-600">
           <div className="flex w-max items-center gap-2">
             <Image src={thermometer} width={32} height={32} alt="Icon" />
             <span className="font-nunito text-sm font-bold text-base-gray-200">
@@ -24,7 +24,7 @@ export default function DetailsToday() {
           </span>
         </div>
 
-        <div className="flex h-[64px] w-full items-center justify-between border-b border-b-base-gray-600 mobile:h-[56px]">
+        <div className="mobile1:h-[56px] flex h-[64px] w-full items-center justify-between border-b border-b-base-gray-600">
           <div className="flex w-max items-center gap-2">
             <Image src={rain} width={32} height={32} alt="Icon" />
             <span className="font-nunito text-sm font-bold text-base-gray-200">
@@ -36,7 +36,7 @@ export default function DetailsToday() {
           </span>
         </div>
 
-        <div className="flex h-[64px] w-full items-center justify-between border-b border-b-base-gray-600 mobile:h-[56px]">
+        <div className="mobile1:h-[56px] flex h-[64px] w-full items-center justify-between border-b border-b-base-gray-600">
           <div className="flex w-max items-center gap-2">
             <Image src={wind} width={32} height={32} alt="Icon" />
             <span className="font-nunito text-sm font-bold text-base-gray-200">
@@ -48,7 +48,7 @@ export default function DetailsToday() {
           </span>
         </div>
 
-        <div className="flex h-[64px] w-full items-center justify-between border-b border-b-base-gray-600 mobile:h-[56px]">
+        <div className="mobile1:h-[56px] flex h-[64px] w-full items-center justify-between border-b border-b-base-gray-600">
           <div className="flex w-max items-center gap-2">
             <Image src={drop} width={32} height={32} alt="Icon" />
             <span className="font-nunito text-sm font-bold text-base-gray-200">

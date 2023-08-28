@@ -6,8 +6,8 @@ import Link from 'next/link'
 
 export default function Card() {
   return (
-    <div className="h-full max-h-[720px] w-full max-w-[664px]">
-      <div className="flex aspect-[720/664] flex-col gap-4 rounded-xl bg-base-gray-800 p-4">
+    <div className="h-full max-h-[720px] w-full max-w-[664px] shrink-0 tablet2:max-w-[630px]">
+      <div className="flex aspect-[720/696] flex-col  gap-4 rounded-xl bg-base-gray-800 p-4 tablet2:aspect-[720/696]">
         <div className="flex h-max w-full gap-3">
           <Link
             href="/"
@@ -28,7 +28,7 @@ export default function Card() {
               <span className="font-nunito text-xl font-bold text-white mobile2:text-lg">
                 Porto Alegre, RS
               </span>
-              <span className="font-nunito text-base text-white mobile2:text-sm">
+              <span className="pr-3 font-nunito text-base text-white mobile2:text-sm">
                 Segunda-feira, 15 de maio de 2023
               </span>
             </div>
