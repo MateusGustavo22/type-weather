@@ -3,14 +3,14 @@ import Image from 'next/image'
 import Link from 'next/link'
 import logo_min from 'public/icons/logo-min.svg'
 
-import Input from './Input'
 import { getWeatherBackground } from '@/utils/backgroundByCode'
-import { weatherCodeToDescription } from '@/utils/weatherCode'
+import { weatherCodeToDescription } from '@/utils/weatherCodes'
 import { getCurrentDateFormatted } from '@/utils/formatDate'
 import { getWeatherIcon } from '@/utils/weatherIconsByCode'
+import Input from '@/components/Input'
 
 interface CardProps {
-  city?: string
+  cityName: string | null
   temperature: number
   temperature_max: number
   temperature_min: number
@@ -18,7 +18,7 @@ interface CardProps {
 }
 
 export default function Card({
-  city,
+  cityName,
   temperature,
   temperature_max,
   temperature_min,
@@ -27,6 +27,7 @@ export default function Card({
   const [weatherBackground, setWeatherBackground] = useState('')
   const [weatherIcon, setWeatherIcon] = useState('')
   const [currentDate, setCurrentDate] = useState({ date: '', hours: '' })
+  const [IsLoading, setIsLoading] = useState(false)
 
   const weatherImageBackground = getWeatherBackground(weathercode)
   const weatherIconStatus = getWeatherIcon(weathercode)
@@ -53,8 +54,9 @@ export default function Card({
           >
             <Image src={logo_min} width={30} height={30} alt="Logo Icon" />
           </Link>
-          <Input />
+          <Input loading={IsLoading} />
         </div>
+
         <div
           style={{
             backgroundImage: `url(${weatherBackground})`,
@@ -63,32 +65,32 @@ export default function Card({
         >
           <div className="flex h-[58px] w-full justify-between">
             <div className="flex w-max flex-col gap-2">
-              <span className="font-nunito text-xl font-bold text-white mobile2:text-lg">
-                Porto Alegre, RS
+              <span className="font-nunito text-xl font-bold text-white mobile1:text-lg">
+                {cityName}
               </span>
-              <span className="pr-3 font-nunito text-base text-white mobile2:text-sm">
+              <span className="pr-3 font-nunito text-base text-white mobile1:text-sm">
                 {currentDate.date}
               </span>
             </div>
-            <span className="font-nunito text-xl font-bold text-white mobile2:text-sm">
+            <span className="font-nunito text-xl font-bold text-white mobile1:text-sm">
               {currentDate.hours}
             </span>
           </div>
           <div className="w-max">
             <div className="flex w-max flex-col gap-3">
               <span className="font-nunito text-[96px] font-extrabold leading-none text-white mobile2:text-5xl">
-                {temperature?.toFixed(0)}ºc
+                {temperature ? `${temperature.toFixed(0)}ºc` : null}
               </span>
-              <div className="flex flex-row items-center gap-3 mobile2:flex-col mobile2:items-start mobile2:gap-0">
+              <div className="flex flex-row items-center gap-3 mobile1:gap-0 mobile2:flex-col mobile2:items-start">
                 <div className="flex w-max gap-2">
                   <span className="flex font-nunito text-xl font-bold text-white mobile2:text-base">
-                    {temperature_max?.toFixed(0)}ºc
+                    {temperature_max ? `${temperature_max.toFixed(0)}ºc` : null}
                   </span>
                   <span className="flex font-nunito text-xl font-bold text-white mobile2:text-base">
                     /
                   </span>
                   <span className="flex font-nunito text-xl font-bold text-white mobile2:text-base">
-                    {temperature_min?.toFixed(0)}
+                    {temperature_min ? `${temperature_min.toFixed(0)}ºc` : null}
                   </span>
                 </div>
                 <div className="h-2 w-2 rounded-full bg-white opacity-40 mobile2:hidden" />
