@@ -13,8 +13,8 @@ const config: Config = {
         mobile2: { max: '532px' },
         tablet1: { max: '670px' },
         tablet2: { max: '1200px' },
-        desktop1: { max: '1366px' },
-        desktop2: { max: '1314px' },
+        desktop1: { max: '1314px' },
+        desktop2: { max: '1366px' },
       },
       colors: {
         blue_light: '#8FB2F5',

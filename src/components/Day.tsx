@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { formatTimestampToDay } from '@/utils/timestampToDay'
-import { weatherCodeToDescription } from '@/utils/weatherCode'
+import { weatherCodeToDescription } from '@/utils/weatherCodes'
 import { getWeatherIcon } from '@/utils/weatherIconsByCode'
 
 interface DayProps {
@@ -50,7 +50,7 @@ export default function Day({
   }, [timestamp])
 
   return (
-    <div className="flex h-[212px] w-[130px] flex-col items-center justify-center gap-3 mobile1:h-[150px] mobile1:w-[26px] mobile2:h-[152px] mobile2:w-[88px] desktop1:w-[88px]">
+    <div className="flex h-[212px] w-[116px] flex-col items-center justify-center gap-0 mobile1:h-[150px] mobile1:w-[26px] mobile2:h-[152px] mobile2:w-[88px] desktop1:w-[88px]">
       <span className="font-nunito text-sm font-bold text-base-gray-200 mobile2:hidden desktop2:hidden">
         {dayOfWeek ? dayOfWeek.dayOfWeek : null}
       </span>
@@ -58,16 +58,16 @@ export default function Day({
         {dayOfWeek ? dayOfWeek.dayOfWeekMin : null}
       </span>
       <div
-        className="relative h-[66px] w-[66px] bg-cover bg-center"
+        className="relative h-[116px] w-[116px] bg-cover bg-center mobile2:h-[68px] mobile2:w-[68px]"
         style={{
           backgroundImage: `url(${weatherIcon})`,
         }}
       />
       <div className="flex w-max flex-col items-center justify-center gap-1">
-        <span className="font-nunito text-sm text-base-gray-200 mobile2:hidden desktop1:hidden">
+        <span className="font-nunito text-sm text-base-gray-200 mobile2:hidden desktop2:hidden">
           {weatherStatusDescription}
         </span>
-        <div className="flex w-full flex-row items-center justify-center gap-2 mobile1:flex-col mobile2:gap-0">
+        <div className="flex w-full flex-row items-center justify-center gap-2 mobile2:flex-col mobile2:gap-0">
           <span className="font-nunito text-sm font-bold text-base-gray-100">
             {temperature_max?.toFixed(0)}ºc
           </span>

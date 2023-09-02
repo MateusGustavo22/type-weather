@@ -32,7 +32,7 @@ const defaultSuggestions = [
   },
 ]
 
-const searchCityNameApi = process.env.NEXT_PUBLIC_SEARCH_CITY_NAME
+const searchCityNameApi = 'https://geocoding-api.open-meteo.com/v1/search?name='
 
 interface InputProps {
   loading?: boolean
