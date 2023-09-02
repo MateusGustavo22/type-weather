@@ -1,4 +1,4 @@
-const fetchWeatherAPI = async (api_url: string) => {
+export const fetchWeatherAPI = async (api_url: string) => {
   try {
     const response = await fetch(api_url)
     const data = response.json()
@@ -12,5 +12,3 @@ const fetchWeatherAPI = async (api_url: string) => {
     console.log('Falha ao consultar a API')
   }
 }
-
-export default fetchWeatherAPI

@@ -5,14 +5,28 @@ import rain from 'public/icons/phosphor/rain.svg'
 import drop from 'public/icons/phosphor/drop.svg'
 import sun from 'public/icons/phosphor/sun.svg'
 
-export default function DetailsToday() {
+interface DetailsTodayProps {
+  thermal_sensation: number | undefined
+  probability_of_rain: number | undefined
+  windspeed: number | undefined
+  air_humidity?: number | undefined
+  uv_index?: number | undefined
+}
+
+export default function DetailsToday({
+  thermal_sensation,
+  probability_of_rain,
+  windspeed,
+  air_humidity,
+  uv_index,
+}: DetailsTodayProps) {
   return (
-    <div className="mobile1:p-4 flex w-full max-w-[630px] flex-col gap-5 rounded-xl bg-base-gray-800 p-6 pb-2">
+    <div className="flex w-full max-w-[630px] flex-col gap-5 rounded-xl bg-base-gray-800 p-6 pb-2 mobile1:p-4">
       <span className="font-nunito text-base text-base-gray-400 tablet2:hidden">
         Detalhes do clima hoje
       </span>
       <div className="w-full">
-        <div className="mobile1:h-[56px] flex h-[64px] w-full items-center justify-between border-b border-b-base-gray-600">
+        <div className="flex h-[64px] w-full items-center justify-between border-b border-b-base-gray-600 mobile1:h-[56px]">
           <div className="flex w-max items-center gap-2">
             <Image src={thermometer} width={32} height={32} alt="Icon" />
             <span className="font-nunito text-sm font-bold text-base-gray-200">
@@ -20,11 +34,11 @@ export default function DetailsToday() {
             </span>
           </div>
           <span className="font-nunito text-xl font-bold text-base-gray-100">
-            26ºc
+            {thermal_sensation}ºc
           </span>
         </div>
 
-        <div className="mobile1:h-[56px] flex h-[64px] w-full items-center justify-between border-b border-b-base-gray-600">
+        <div className="flex h-[64px] w-full items-center justify-between border-b border-b-base-gray-600 mobile1:h-[56px]">
           <div className="flex w-max items-center gap-2">
             <Image src={rain} width={32} height={32} alt="Icon" />
             <span className="font-nunito text-sm font-bold text-base-gray-200">
@@ -32,11 +46,11 @@ export default function DetailsToday() {
             </span>
           </div>
           <span className="font-nunito text-xl font-bold text-base-gray-100">
-            26ºc
+            {probability_of_rain}%
           </span>
         </div>
 
-        <div className="mobile1:h-[56px] flex h-[64px] w-full items-center justify-between border-b border-b-base-gray-600">
+        <div className="flex h-[64px] w-full items-center justify-between border-b border-b-base-gray-600 mobile1:h-[56px]">
           <div className="flex w-max items-center gap-2">
             <Image src={wind} width={32} height={32} alt="Icon" />
             <span className="font-nunito text-sm font-bold text-base-gray-200">
@@ -44,11 +58,11 @@ export default function DetailsToday() {
             </span>
           </div>
           <span className="font-nunito text-xl font-bold text-base-gray-100">
-            26ºc
+            {windspeed} km/h
           </span>
         </div>
 
-        <div className="mobile1:h-[56px] flex h-[64px] w-full items-center justify-between border-b border-b-base-gray-600">
+        <div className="flex h-[64px] w-full items-center justify-between border-b border-b-base-gray-600 mobile1:h-[56px]">
           <div className="flex w-max items-center gap-2">
             <Image src={drop} width={32} height={32} alt="Icon" />
             <span className="font-nunito text-sm font-bold text-base-gray-200">
@@ -56,7 +70,7 @@ export default function DetailsToday() {
             </span>
           </div>
           <span className="font-nunito text-xl font-bold text-base-gray-100">
-            26ºc
+            {air_humidity}%
           </span>
         </div>
 
@@ -68,7 +82,7 @@ export default function DetailsToday() {
             </span>
           </div>
           <span className="font-nunito text-xl font-bold text-base-gray-100">
-            26ºc
+            {uv_index}
           </span>
         </div>
       </div>

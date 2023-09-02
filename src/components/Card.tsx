@@ -1,12 +1,13 @@
-import Image from 'next/image'
-import Input from './Input'
-import logo_min from 'public/icons/logo-min.svg'
-import clear_day from 'public/icons/wheather/clear-day.svg'
-import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { getWeatherBackground } from '@/utils/weatherBackground'
+import Image from 'next/image'
+import Link from 'next/link'
+import logo_min from 'public/icons/logo-min.svg'
+
+import Input from './Input'
+import { getWeatherBackground } from '@/utils/backgroundByCode'
 import { weatherCodeToDescription } from '@/utils/weatherCode'
 import { getCurrentDateFormatted } from '@/utils/formatDate'
+import { getWeatherIcon } from '@/utils/weatherIconsByCode'
 
 interface CardProps {
   city?: string
@@ -24,16 +25,23 @@ export default function Card({
   weathercode,
 }: CardProps) {
   const [weatherBackground, setWeatherBackground] = useState('')
+  const [weatherIcon, setWeatherIcon] = useState('')
+  const [currentDate, setCurrentDate] = useState({ date: '', hours: '' })
 
-  const weatherImage = getWeatherBackground(weathercode)
+  const weatherImageBackground = getWeatherBackground(weathercode)
+  const weatherIconStatus = getWeatherIcon(weathercode)
 
   useEffect(() => {
-    if (weatherImage != '') {
-      setWeatherBackground('/images/backgrounds/' + weatherImage)
+    if (weatherImageBackground != '' && weatherIconStatus != '') {
+      setWeatherBackground('/images/backgrounds/' + weatherImageBackground)
+      setWeatherIcon('/icons/weather/' + weatherIconStatus)
     }
-  }, [weatherImage])
+  }, [weatherImageBackground, weatherIconStatus])
 
-  const { date, hours } = getCurrentDateFormatted()
+  useEffect(() => {
+    const { date, hours } = getCurrentDateFormatted()
+    setCurrentDate({ date: date, hours: hours })
+  }, [])
 
   return (
     <div className="h-full max-h-[720px] w-full max-w-[664px] shrink-0 tablet2:max-w-[630px]">
@@ -59,11 +67,11 @@ export default function Card({
                 Porto Alegre, RS
               </span>
               <span className="pr-3 font-nunito text-base text-white mobile2:text-sm">
-                {date}
+                {currentDate.date}
               </span>
             </div>
             <span className="font-nunito text-xl font-bold text-white mobile2:text-sm">
-              {hours}
+              {currentDate.hours}
             </span>
           </div>
           <div className="w-max">
@@ -92,9 +100,12 @@ export default function Card({
               </div>
             </div>
           </div>
-          <div className="absolute bottom-0 right-0 h-[248px] w-[248px] mobile2:h-[160px] mobile2:w-[160px]">
-            <Image src={clear_day} fill alt="Weather Icon" />
-          </div>
+          <div
+            className="absolute bottom-0 right-0 h-[248px] w-[248px] bg-cover bg-center mobile2:h-[160px] mobile2:w-[160px]"
+            style={{
+              backgroundImage: `url(${weatherIcon})`,
+            }}
+          />
         </div>
       </div>
     </div>
