@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${nunito.variable} bg-base-gray-900`}>
-        <div className="m-auto flex max-w-[1400px] flex-col items-center bg-base-gray-900 pb-6">
+        <div className="m-auto  flex max-w-[1400px] flex-col items-center bg-base-gray-900 pb-6">
           {children}
         </div>
       </body>

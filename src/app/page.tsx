@@ -24,7 +24,7 @@ export default function Home() {
             Escolha um local para ver a previsão do tempo
           </span>
         </div>
-        <div className="w-full max-w-[452px]">
+        <div className="w-full max-w-[504px]">
           <Input />
         </div>
       </div>
