@@ -3,8 +3,8 @@ import { useEffect, useRef, useState } from 'react'
 import { useDebounce } from 'usehooks-ts'
 import searchCityByInputValue from '@/utils/searchCityByInputValue'
 import Spinner from './Spinner'
-import Link from 'next/link'
 import { ScrollArea } from './ui/scroll-area'
+import Link from 'next/link'
 
 type listOfResultType = {
   id: number
@@ -24,6 +24,9 @@ export default function Input({ loading = false }: InputProps) {
   const [resultBox, setResultBox] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
   const [listOfResults, setListOfResults] = useState<listOfResultType[]>([])
+  const [selectedCity, setSelectedCity] = useState<listOfResultType | null>(
+    null,
+  )
 
   // Caso o click na tela foi fora do input oculta a lista de sugestões
   const handleClickOutside = (event: MouseEvent) => {

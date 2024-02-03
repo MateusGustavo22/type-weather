@@ -7,20 +7,18 @@ import { useQuery } from '@tanstack/react-query'
 import { api } from '@/lib/axios'
 import SpinnerLoading from '@/components/Loading'
 import { useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 
-interface DashboardProps {
-  searchParams: {
-    longitude: string
-    latitude: string
-    city: string
-  }
-}
+export default function Dashboard() {
+  const searchParams = useSearchParams()
+  const latitude = searchParams.get('latitude')
+  const longitude = searchParams.get('longitude')
+  const city = searchParams.get('city')
 
-export default function Dashboard({ searchParams }: DashboardProps) {
   async function getCurrentWeather() {
     try {
       const response = await api.get(
-        `/forecast?latitude=${searchParams.latitude}&longitude=${searchParams.longitude}&hourly=temperature_2m,relativehumidity_2m,apparent_temperature,windspeed_10m,uv_index&daily=temperature_2m_max,temperature_2m_min,rain_sum&current_weather=true&timeformat=unixtime&timezone=America%2FSao_Paulo&forecast_days=1`,
+        `/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m,relativehumidity_2m,apparent_temperature,windspeed_10m,uv_index&daily=temperature_2m_max,temperature_2m_min,rain_sum&current_weather=true&timeformat=unixtime&timezone=America%2FSao_Paulo&forecast_days=1`,
       )
       return response.data
     } catch (error) {
@@ -31,7 +29,7 @@ export default function Dashboard({ searchParams }: DashboardProps) {
   async function getForecastWeather() {
     try {
       const response = await api.get(
-        `forecast?latitude=${searchParams.latitude}&longitude=${searchParams.longitude}&daily=weathercode,temperature_2m_max,temperature_2m_min&timeformat=unixtime&timezone=America%2FSao_Paulo`,
+        `forecast?latitude=${latitude}&longitude=${longitude}&daily=weathercode,temperature_2m_max,temperature_2m_min&timeformat=unixtime&timezone=America%2FSao_Paulo`,
       )
       return response.data
     } catch (error) {
@@ -56,7 +54,7 @@ export default function Dashboard({ searchParams }: DashboardProps) {
   useEffect(() => {
     currentWeatherRefetch()
     forecastWeatherRefetch()
-  }, [searchParams, currentWeatherRefetch, forecastWeatherRefetch])
+  }, [latitude, longitude, city, currentWeatherRefetch, forecastWeatherRefetch])
 
   currentWeatherIsLoading && <SpinnerLoading />
 
@@ -68,10 +66,10 @@ export default function Dashboard({ searchParams }: DashboardProps) {
         </div>
       ) : (
         <div className="flex min-h-screen items-center px-2 pb-6 tablet2:mt-2">
-          {currentWeather && searchParams.city && (
+          {currentWeather && city && (
             <div className="flex w-full justify-center gap-5 tablet2:flex-col tablet2:items-center tablet2:gap-3">
               <Card
-                cityName={searchParams.city}
+                cityName={city}
                 temperature={currentWeather.current_weather.temperature}
                 temperature_max={currentWeather.daily.temperature_2m_max[0]}
                 temperature_min={currentWeather.daily.temperature_2m_min[0]}
