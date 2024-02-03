@@ -1,4 +1,4 @@
-export const fetchWeatherAPI = async (api_url: string) => {
+export const fetchApiData = async (api_url: string) => {
   try {
     const response = await fetch(api_url)
     const data = await response.json()

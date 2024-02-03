@@ -4,10 +4,10 @@ import { weatherCodeToDescription } from '@/utils/weatherCodes'
 import { getWeatherIcon } from '@/utils/weatherIconsByCode'
 
 interface DayProps {
-  temperature_max: number | undefined
-  temperature_min: number | undefined
-  weathercode: number | undefined
-  timestamp: number | undefined
+  temperature_max: number
+  temperature_min: number
+  weathercode: number
+  timestamp: number
   icon?: string
 }
 

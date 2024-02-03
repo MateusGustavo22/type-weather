@@ -1,3 +1,4 @@
+'use client'
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -10,7 +11,7 @@ import { getWeatherIcon } from '@/utils/weatherIconsByCode'
 import Input from '@/components/Input'
 
 interface CardProps {
-  cityName: string | null
+  cityName: string
   temperature: number
   temperature_max: number
   temperature_min: number
@@ -45,7 +46,7 @@ export default function Card({
   }, [])
 
   return (
-    <div className="h-full max-h-[720px] w-full max-w-[664px] shrink-0 tablet2:max-w-[630px]">
+    <div className="h-full max-h-[720px] w-full max-w-[664px] shrink-0 rounded-xl border border-slate-700 tablet2:max-w-[630px]">
       <div className="flex aspect-[720/696] flex-col  gap-4 rounded-xl bg-base-gray-800 p-4 tablet2:aspect-[720/696]">
         <div className="flex h-max w-full gap-3">
           <Link

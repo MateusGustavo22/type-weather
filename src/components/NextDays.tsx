@@ -23,16 +23,16 @@ export default function NextDays({
     return (
       <Day
         key={timestamp[i]}
-        timestamp={timestamp ? timestamp[i] : undefined}
-        temperature_max={temperature_max ? temperature_max[i] : undefined}
-        temperature_min={temperature_min ? temperature_min[i] : undefined}
-        weathercode={weathercode ? weathercode[i] : undefined}
+        timestamp={timestamp[i]}
+        temperature_max={temperature_max[i]}
+        temperature_min={temperature_min[i]}
+        weathercode={weathercode[i]}
       />
     )
   }
 
   return (
-    <div className="flex h-max w-full max-w-[630px] flex-col gap-5 rounded-xl bg-base-gray-800 p-6 mobile2:p-2">
+    <div className="flex h-max w-full max-w-[630px] flex-col gap-5 rounded-xl border border-slate-700 bg-base-gray-800 p-6 mobile2:p-2">
       <span className="font-nunito text-base text-base-gray-400 mobile2:hidden">
         Previsão para 5 dias
       </span>

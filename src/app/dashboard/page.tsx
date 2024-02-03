@@ -2,78 +2,110 @@
 import Card from '@/components/Card'
 import DetailsToday from '@/components/DetailsToday'
 import NextDays from '@/components/NextDays'
-import { fetchWeatherAPI } from '@/utils/fetchWeatherApi'
 import { getArrayItemByCurrentTime } from '@/utils/arrayItemByCurrentTime'
-import { useEffect, useState } from 'react'
-import { useSearchParams } from 'next/navigation'
-
-const forecastWeatherUrl = process.env.NEXT_PUBLIC_FORECAST_WEATHER
+import { useQuery } from '@tanstack/react-query'
+import { api } from '@/lib/axios'
+import SpinnerLoading from '@/components/Loading'
+import { useEffect } from 'react'
 
 interface DashboardProps {
-  params: {
+  searchParams: {
     longitude: string
     latitude: string
+    city: string
   }
 }
 
-export default function Dashboard({ params }: DashboardProps) {
-  const [weatherData, setWeatherData] = useState<any>(null)
-  const [forecastWeatherData, setForecastWeatherData] = useState<any>(null)
-  const searchParams = useSearchParams()
-  const latitude = searchParams.get('latitude')
-  const longitude = searchParams.get('longitude')
-  const cityName = searchParams.get('city')
-
-  const currentWeatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m,relativehumidity_2m,apparent_temperature,windspeed_10m,uv_index&daily=temperature_2m_max,temperature_2m_min,rain_sum&current_weather=true&timeformat=unixtime&timezone=America%2FSao_Paulo&forecast_days=1`
-  const forecastWeatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&daily=weathercode,temperature_2m_max,temperature_2m_min&timeformat=unixtime&timezone=America%2FSao_Paulo`
-
-  const getWeatherApi = async (
-    apiUrl: string,
-    setDate: React.Dispatch<React.SetStateAction<any>>,
-  ) => {
-    const data = await fetchWeatherAPI(apiUrl)
-    setDate(data)
+export default function Dashboard({ searchParams }: DashboardProps) {
+  async function getCurrentWeather() {
+    try {
+      const response = await api.get(
+        `/forecast?latitude=${searchParams.latitude}&longitude=${searchParams.longitude}&hourly=temperature_2m,relativehumidity_2m,apparent_temperature,windspeed_10m,uv_index&daily=temperature_2m_max,temperature_2m_min,rain_sum&current_weather=true&timeformat=unixtime&timezone=America%2FSao_Paulo&forecast_days=1`,
+      )
+      return response.data
+    } catch (error) {
+      console.log(error)
+    }
   }
 
-  useEffect(() => {
-    if (currentWeatherUrl != undefined && forecastWeatherUrl != undefined) {
-      getWeatherApi(currentWeatherUrl, setWeatherData)
-      getWeatherApi(forecastWeatherUrl, setForecastWeatherData)
-    } else {
-      console.log('currentWeatherUrl não está definida.')
+  async function getForecastWeather() {
+    try {
+      const response = await api.get(
+        `forecast?latitude=${searchParams.latitude}&longitude=${searchParams.longitude}&daily=weathercode,temperature_2m_max,temperature_2m_min&timeformat=unixtime&timezone=America%2FSao_Paulo`,
+      )
+      return response.data
+    } catch (error) {
+      console.log(error)
     }
-  }, [searchParams])
+  }
+
+  const {
+    data: currentWeather,
+    isLoading: currentWeatherIsLoading,
+    refetch: currentWeatherRefetch,
+  } = useQuery({
+    queryKey: ['current-weather'],
+    queryFn: getCurrentWeather,
+  })
+
+  const { data: forecastWeather, refetch: forecastWeatherRefetch } = useQuery({
+    queryKey: ['forecast-weather'],
+    queryFn: getForecastWeather,
+  })
+
+  useEffect(() => {
+    currentWeatherRefetch()
+    forecastWeatherRefetch()
+  }, [searchParams, currentWeatherRefetch, forecastWeatherRefetch])
+
+  currentWeatherIsLoading && <SpinnerLoading />
 
   return (
-    <div className="flex h-full w-full gap-4 p-6 pb-4 mobile1:gap-3  mobile1:p-2 tablet2:flex-col tablet2:items-center">
-      <Card
-        cityName={cityName}
-        temperature={weatherData?.current_weather.temperature}
-        temperature_max={weatherData?.daily.temperature_2m_max[0]}
-        temperature_min={weatherData?.daily.temperature_2m_min[0]}
-        weathercode={weatherData?.current_weather.weathercode}
-      />
-      <div className="relative flex h-full w-full flex-col  gap-4  mobile1:gap-3 tablet2:items-center desktop1:w-full">
-        <DetailsToday
-          thermal_sensation={getArrayItemByCurrentTime(
-            weatherData?.hourly.apparent_temperature,
+    <div>
+      {currentWeatherIsLoading ? (
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+          <SpinnerLoading />
+        </div>
+      ) : (
+        <div className="flex min-h-screen items-center px-2 pb-6 tablet2:mt-2">
+          {currentWeather && searchParams.city && (
+            <div className="flex w-full justify-center gap-5 tablet2:flex-col tablet2:items-center tablet2:gap-3">
+              <Card
+                cityName={searchParams.city}
+                temperature={currentWeather.current_weather.temperature}
+                temperature_max={currentWeather.daily.temperature_2m_max[0]}
+                temperature_min={currentWeather.daily.temperature_2m_min[0]}
+                weathercode={currentWeather.current_weather.weathercode}
+              />
+              <div className="flex flex-col items-center gap-4 tablet2:w-full tablet2:gap-3">
+                <DetailsToday
+                  thermal_sensation={getArrayItemByCurrentTime(
+                    currentWeather.hourly.apparent_temperature,
+                  )}
+                  windspeed={getArrayItemByCurrentTime(
+                    currentWeather.hourly.windspeed_10m,
+                  )}
+                  probability_of_rain={currentWeather.daily.rain_sum[0]}
+                  air_humidity={getArrayItemByCurrentTime(
+                    currentWeather.hourly.relativehumidity_2m,
+                  )}
+                  uv_index={getArrayItemByCurrentTime(
+                    currentWeather.hourly.uv_index,
+                  )}
+                />
+                {forecastWeather && (
+                  <NextDays
+                    timestamp={forecastWeather.daily.time}
+                    temperature_max={forecastWeather.daily.temperature_2m_max}
+                    temperature_min={forecastWeather.daily.temperature_2m_min}
+                    weathercode={forecastWeather.daily.weathercode}
+                  />
+                )}
+              </div>
+            </div>
           )}
-          windspeed={getArrayItemByCurrentTime(
-            weatherData?.hourly.windspeed_10m,
-          )}
-          probability_of_rain={weatherData?.daily.rain_sum[0]}
-          air_humidity={getArrayItemByCurrentTime(
-            weatherData?.hourly.relativehumidity_2m,
-          )}
-          uv_index={getArrayItemByCurrentTime(weatherData?.hourly.uv_index)}
-        />
-        <NextDays
-          timestamp={forecastWeatherData?.daily.time}
-          temperature_max={forecastWeatherData?.daily.temperature_2m_max}
-          temperature_min={forecastWeatherData?.daily.temperature_2m_min}
-          weathercode={forecastWeatherData?.daily.weathercode}
-        />
-      </div>
+        </div>
+      )}
     </div>
   )
 }

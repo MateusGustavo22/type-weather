@@ -2,6 +2,7 @@ import './globals.css'
 import type { Metadata } from 'next'
 
 import { Nunito } from 'next/font/google'
+import { Providers } from './providers'
 
 const nunito = Nunito({
   weight: ['400', '700', '800'],
@@ -21,9 +22,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${nunito.variable} bg-base-gray-900`}>
-        <div className="m-auto  flex max-w-[1400px] flex-col items-center bg-base-gray-900 pb-6">
-          {children}
-        </div>
+        <head>
+          <link rel="icon" href="/icons/logo-min.svg" sizes="" />
+        </head>
+        <Providers>{children}</Providers>
       </body>
     </html>
   )

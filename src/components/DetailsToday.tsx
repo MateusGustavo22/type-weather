@@ -1,3 +1,4 @@
+'use client'
 import Image from 'next/image'
 import thermometer from 'public/icons/phosphor/thermometer.svg'
 import wind from 'public/icons/phosphor/wind.svg'
@@ -6,11 +7,11 @@ import drop from 'public/icons/phosphor/drop.svg'
 import sun from 'public/icons/phosphor/sun.svg'
 
 interface DetailsTodayProps {
-  thermal_sensation: number | undefined
-  probability_of_rain: number | undefined
-  windspeed: number | undefined
-  air_humidity?: number | undefined
-  uv_index?: number | undefined
+  thermal_sensation: number
+  probability_of_rain: number
+  windspeed: number
+  air_humidity?: number
+  uv_index?: number
 }
 
 export default function DetailsToday({
@@ -21,7 +22,7 @@ export default function DetailsToday({
   uv_index,
 }: DetailsTodayProps) {
   return (
-    <div className="flex w-full max-w-[630px] flex-col gap-5 rounded-xl bg-base-gray-800 p-6 pb-2 mobile1:p-4">
+    <div className="flex h-max w-full max-w-[630px] flex-col gap-5 rounded-xl border border-slate-700 bg-base-gray-800 p-6 pb-2 mobile1:p-4">
       <span className="mobile:hidden font-nunito text-base text-base-gray-400">
         Detalhes do clima hoje
       </span>
@@ -34,7 +35,7 @@ export default function DetailsToday({
             </span>
           </div>
           <span className="font-nunito text-xl font-bold text-base-gray-100 mobile1:text-base">
-            {thermal_sensation ? `${thermal_sensation}ºc` : null}
+            {`${thermal_sensation}ºc`}
           </span>
         </div>
 
@@ -46,9 +47,7 @@ export default function DetailsToday({
             </span>
           </div>
           <span className="font-nunito text-xl font-bold text-base-gray-100 mobile1:text-base">
-            {probability_of_rain != undefined
-              ? `${probability_of_rain}%`
-              : null}
+            {`${probability_of_rain}%`}
           </span>
         </div>
 
@@ -60,7 +59,7 @@ export default function DetailsToday({
             </span>
           </div>
           <span className="font-nunito text-xl font-bold text-base-gray-100 mobile1:text-base">
-            {windspeed ? `${windspeed} km/h` : null}
+            {`${windspeed} km/h`}
           </span>
         </div>
 
@@ -72,7 +71,7 @@ export default function DetailsToday({
             </span>
           </div>
           <span className="font-nunito text-xl font-bold text-base-gray-100 mobile1:text-base">
-            {air_humidity ? `${air_humidity}%` : null}
+            {`${air_humidity}%`}
           </span>
         </div>
 
@@ -84,7 +83,7 @@ export default function DetailsToday({
             </span>
           </div>
           <span className="font-nunito text-xl font-bold text-base-gray-100 mobile1:text-base">
-            {uv_index != undefined ? uv_index : null}
+            {uv_index}
           </span>
         </div>
       </div>

@@ -1,7 +1,7 @@
 import { getCountryAbbreviation } from './countryAbbreviatios'
-import { fetchWeatherAPI } from './fetchWeatherApi'
+import { fetchApiData } from './fetchApiData'
 
-export default async function getSearchCityApi(url: string) {
+export default async function searchCityByInputValue(url: string) {
   function formatCityStateName(cityState: string) {
     return cityState.substring(0, 2).toUpperCase()
   }
@@ -33,7 +33,7 @@ export default async function getSearchCityApi(url: string) {
   }
 
   const getWeatherApi = async (apiUrl: string) => {
-    const result = await fetchWeatherAPI(apiUrl)
+    const result = await fetchApiData(apiUrl)
     const resultFormatted = formatSearchResult(result.results)
     return resultFormatted
   }

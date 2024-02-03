@@ -1,65 +1,40 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import Espinner from './Spinner'
 import { useDebounce } from 'usehooks-ts'
-import getSearchCityApi from '@/utils/getSearchCityApi'
+import searchCityByInputValue from '@/utils/searchCityByInputValue'
+import Spinner from './Spinner'
+import Link from 'next/link'
+import { ScrollArea } from './ui/scroll-area'
 
-const defaultSuggestions = [
-  {
-    id: 1234567,
-    cityName: 'Aracaju, SE - Brasil',
-    longitude: -37.0717,
-    latitude: -10.9111,
-  },
-  {
-    id: 1234568,
-    cityName: 'Rio de Janeiro, RJ - Brasil',
-    longitude: -43.1822,
-    latitude: -22.9064,
-  },
-  {
-    id: 1234569,
-    cityName: 'Salvador, BA - Brasil',
-    longitude: -38.5108,
-    latitude: -12.9711,
-  },
-  {
-    id: 1234510,
-    cityName: 'Brasília, DF - Brasil',
-    longitude: -47.9297,
-    latitude: -15.7797,
-  },
-]
-
-const searchCityNameApi = 'https://geocoding-api.open-meteo.com/v1/search?name='
+type listOfResultType = {
+  id: number
+  cityName: string
+  longitude: number
+  latitude: number
+}
 
 interface InputProps {
   loading?: boolean
 }
 
 export default function Input({ loading = false }: InputProps) {
-  const [IsLoading, setIsLoading] = useState(loading ? loading : false)
-  const [options, setOptions] =
-    useState<typeof defaultSuggestions>(defaultSuggestions)
-  const [displayOpitonsBox, setDisplayOptionsBox] = useState(false)
+  const [isLoading, setIsLoading] = useState(loading ? loading : false)
   const [inputValue, setInputValue] = useState<string>('')
-
   const debouncedValue = useDebounce<string>(inputValue, 500)
+  const [resultBox, setResultBox] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
-  const optionsBox = useRef<HTMLUListElement>(null)
-  const router = useRouter()
+  const [listOfResults, setListOfResults] = useState<listOfResultType[]>([])
 
-  const searchCityUrl = `${searchCityNameApi}${debouncedValue}`
-
+  // Caso o click na tela foi fora do input oculta a lista de sugestões
   const handleClickOutside = (event: MouseEvent) => {
     if (inputRef.current && !inputRef.current.contains(event.target as Node)) {
-      setDisplayOptionsBox(false)
+      setResultBox(false)
     } else {
-      setDisplayOptionsBox(true)
+      setResultBox(true)
     }
   }
 
+  // Adiciona um evento para monitorar os clicks na tela
   useEffect(() => {
     document.addEventListener('click', handleClickOutside)
 
@@ -68,47 +43,23 @@ export default function Input({ loading = false }: InputProps) {
     }
   }, [])
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value)
-  }
-
-  const searchCity = async (url: string) => {
-    setOptions([])
-    setIsLoading(true)
-    const searchResult = await getSearchCityApi(searchCityUrl)
-    if (searchResult) {
-      setOptions(searchResult)
-      setIsLoading(false)
-    } else {
-      setOptions([])
-      setIsLoading(false)
-    }
-  }
-
-  type selectedOption = (typeof defaultSuggestions)[0]
-
-  const selectOption = (item: selectedOption) => {
-    setInputValue(item.cityName)
-    setIsLoading(true)
-    setOptions([])
-    const dashboardRouter = `/dashboard?latitude=${item.latitude}&longitude=${item.longitude}&city=${item.cityName}`
-    router.push(dashboardRouter)
-  }
-
   useEffect(() => {
-    if (inputValue != '' && inputValue.length > 2) {
-      const filteredOptions = options.some(
-        (item) => item.cityName === inputValue,
+    const searchCity = async () => {
+      setListOfResults([])
+      setIsLoading(true)
+      const searchResult = await searchCityByInputValue(
+        `https://geocoding-api.open-meteo.com/v1/search?name=${debouncedValue}`,
       )
-      if (filteredOptions) {
-        return
+      if (searchResult) {
+        setListOfResults(searchResult)
+        setIsLoading(false)
       } else {
-        searchCity(searchCityUrl)
+        setListOfResults([])
+        setIsLoading(false)
       }
-    } else {
-      setOptions([])
-      setOptions(defaultSuggestions)
     }
+
+    searchCity()
   }, [debouncedValue])
 
   return (
@@ -116,32 +67,38 @@ export default function Input({ loading = false }: InputProps) {
       <div className="group relative flex h-max w-full ">
         <input
           value={inputValue}
-          onChange={handleInputChange}
-          disabled={IsLoading}
+          onChange={(e) => setInputValue(e.target.value)}
+          disabled={isLoading}
           ref={inputRef}
           placeholder="Buscar local"
-          data-loading={IsLoading}
+          data-loading={isLoading}
           className="flex h-[56px] w-full rounded-lg border-2 border-transparent bg-base-gray-600 pl-5 pr-5 font-nunito text-base text-white placeholder-base-gray-400 outline-none hover:border-violet-900 focus:border-violet-500 data-[loading=true]:bg-base-gray-600 data-[loading=true]:text-base-gray-200 data-[loading=true]:hover:border-transparent"
         />
+        <div
+          style={{ display: resultBox ? 'flex' : 'none' }}
+          className="absolute top-16 z-50 flex h-max w-full flex-col overflow-hidden rounded-lg border border-slate-700 bg-base-gray-800 "
+        >
+          <ScrollArea
+            className={`${listOfResults.length > 0 ? 'h-[300px]' : 'h-1'} overflow-hidden`}
+          >
+            <ul className="flex w-full flex-col gap-[1px]">
+              {listOfResults.map((city) => (
+                <Link
+                  key={city.id}
+                  href={`/dashboard?latitude=${city.latitude}&longitude=${city.longitude}&city=${city.cityName}`}
+                >
+                  <li className="w-ful flex h-[54px] cursor-pointer items-center bg-base-gray-500 pl-5 pr-5 font-nunito text-white hover:bg-[#36364a]">
+                    {city.cityName}
+                  </li>
+                </Link>
+              ))}
+            </ul>
+          </ScrollArea>
+        </div>
         <div className="absolute right-5 top-[22%]">
-          {IsLoading ? <Espinner /> : null}
+          {isLoading ? <Spinner /> : null}
         </div>
       </div>
-      <ul
-        ref={optionsBox}
-        style={{ display: displayOpitonsBox ? 'flex' : 'none' }}
-        className="absolute top-16 z-50 flex w-full flex-col gap-[1px] overflow-hidden rounded-lg bg-base-gray-800"
-      >
-        {options.map((item) => (
-          <li
-            key={item.id}
-            onClick={() => selectOption(item)}
-            className="w-ful flex h-[54px] cursor-pointer items-center bg-base-gray-500 pl-5 pr-5 font-nunito text-white hover:bg-[#36364a]"
-          >
-            {item.cityName}
-          </li>
-        ))}
-      </ul>
     </div>
   )
 }

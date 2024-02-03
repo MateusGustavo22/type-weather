@@ -2,7 +2,7 @@ import Image from 'next/image'
 import espinner from 'public/icons/phosphor/spinner.svg'
 import styles from '../styles/espinner.module.css'
 
-export default function Espinner() {
+export default function Spinner() {
   return (
     <Image
       className={styles['rotating-image']}
