@@ -32,7 +32,7 @@ export default function NextDays({
   }
 
   return (
-    <div className="flex h-max w-full max-w-[630px] flex-col gap-5 rounded-xl border border-slate-700 bg-base-gray-800 p-6 mobile2:p-2">
+    <div className="flex h-max w-full max-w-[630px] flex-col gap-5 rounded-xl border border-slate-700 bg-base-gray-800 p-5 mobile2:p-2">
       <span className="font-nunito text-base text-base-gray-400 mobile2:hidden">
         Previsão para 5 dias
       </span>
